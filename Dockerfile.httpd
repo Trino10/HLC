@@ -1,0 +1,17 @@
+FROM httpd
+ARG TZ=Europe/Madrid
+ARG DWEB="/usr/local/apache2/htdocs"
+ARG DWEB1="/var/www/html"
+
+#Instala PHP y los modulos necesarios
+RUN apt-get update && apt-get install -y \
+    php \
+    libapache2-mod-php \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY ./web $DWEB
+RUN chown -R www-data ${DWEB}
+RUN chmod -R u+x ${DWEB}
+
+EXPOSE 80
+CMD apachectl -DFOREGROUND
